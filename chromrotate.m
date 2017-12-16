@@ -10,7 +10,7 @@ function [ x,height,xfrom ] = chromrotate(x,width,height)
         Ilabel = logical(imaget);
         Iprops = regionprops(Ilabel);
         rect = [Iprops.BoundingBox];
-        if(rect(3)/rect(4) < width/height)
+        if(rect(3)/rect(4) <= width/height)
             x=x_new;
             yfrom = fix(rect(1));
             xfrom = fix(rect(2));
@@ -20,7 +20,7 @@ function [ x,height,xfrom ] = chromrotate(x,width,height)
         else
             if(switched==0)
                 switched=1;
-                angle = -5; 
+                angle = -5;
                 yfrom = fix(rect(1));
                 xfrom = fix(rect(2));
                 width=fix(rect(3));
@@ -28,8 +28,9 @@ function [ x,height,xfrom ] = chromrotate(x,width,height)
                 x = x_new;
             else
                 break;
-            end        
+            end
         end
     end
+    x = imcomplement(x);
 end
 

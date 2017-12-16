@@ -1,16 +1,15 @@
-function [ centromere ] = centromere( x,xfrom,height )
-    imaget = imcomplement(x);
+function [ centromere, x ] = centromere( x,xfrom,height )
     length=size(x,1);
-    imaget = im2bw(imaget, 0.9);
+    imageBW = im2bw(x, 0.9);
     counts=zeros(1,length);
     l=1;
     min=0;
     for j=1:length
         for k=1:length
-            if(imaget(j,k)==0)
+            if(imageBW(j,k)==0)
                 counts(l)=counts(l)+1;
             end
-        end   
+        end
         l=l+1;
     end
     max1=0;
@@ -39,11 +38,16 @@ function [ centromere ] = centromere( x,xfrom,height )
     end
     a=min-xfrom;
     centromere=a/height;
+
+    if(abs(counts(max1)-counts(max2))<=2 && max2-max1<0.3*height)
+        if(max2<xfrom+height/2)
+            x=imrotate(x,180);
+        end
+        centromere=0;
+    end
     if(centromere>0.5)
         centromere=1-centromere;
-    end
-    if(counts(max1)==counts(max2) && max2-max1<10)
-        centromere=0;
+        x=imrotate(x,180);
     end
 end
 
